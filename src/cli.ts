@@ -39,7 +39,8 @@ program
 program
   .command("doctor")
   .description("Show a scan report of all agent skill directories")
-  .action(() => doctorCommand());
+  .option("--fix", "Attempt to auto-repair YAML parse errors")
+  .action((opts) => doctorCommand(opts));
 
 program
   .command("scan")
