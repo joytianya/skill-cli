@@ -1,53 +1,102 @@
-# skill-cli
+<div align="center">
 
-A unified CLI to browse and manage AI agent skills across all local AI tools — Claude, Codex, Gemini, and more.
+# 🧠 skill-cli
+
+**One command to rule all your AI agent skills.**
+
+Browse, search, and manage skills across Claude, Codex, Gemini, and every other AI tool on your machine — from a single unified CLI.
 
 ![demo](demo.gif)
 
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![Bun](https://img.shields.io/badge/runtime-bun-black?logo=bun)](https://bun.sh)
+[![GitHub](https://img.shields.io/badge/github-joytianya%2Fskill--cli-181717?logo=github)](https://github.com/joytianya/skill-cli)
 
-## Supported Agents
+</div>
 
-| Agent | Skills Path |
-|-------|-------------|
-| claude | `~/.claude/skills` |
-| codex | `~/.codex/skills` |
-| gemini | `~/.gemini/skills` |
-| openclaw | `~/.openclaw/skills` |
-| kiro | `~/.kiro/skills` |
-| opencode | `~/.config/opencode/skills` |
-| cursor | `~/.cursor/skills` |
-| qoder | `~/.qoder/skills` |
-| continue | `~/.continue/skills` |
+---
 
-## Installation
+## ✨ Features
+
+- 🔍 **Unified view** — scan 10+ agent directories in one command
+- ⚡ **Fast** — incremental scanning with inode dedup, results in milliseconds
+- 🛠️ **Auto-repair** — `doctor --fix` patches broken YAML frontmatter automatically
+- 📁 **Extensible** — add any custom directory with `skill paths add`
+- 🔒 **Safe** — ANSI injection protection, file size limits, read-only by default
+
+---
+
+## 🤖 Supported Agents
+
+| Agent | Default Skills Path |
+|-------|-------------------|
+| 🟣 claude | `~/.claude/skills` |
+| ⚫ codex | `~/.codex/skills` |
+| 🔵 gemini | `~/.gemini/skills` |
+| 🟠 openclaw | `~/.openclaw/skills` |
+| 🟡 kiro | `~/.kiro/skills` |
+| 🟢 opencode | `~/.config/opencode/skills` |
+| 🔷 cursor | `~/.cursor/skills` |
+| ⬜ qoder | `~/.qoder/skills` |
+| 🔴 continue | `~/.continue/skills` |
+
+> Don't see your agent? Use `skill paths add <dir>` to add any directory.
+
+---
+
+## 📦 Installation
+
+**Requirements:** [Bun](https://bun.sh) ≥ 1.0
 
 ```bash
+git clone https://github.com/joytianya/skill-cli.git
+cd skill-cli
+bun install
 bun link
 ```
 
-## Commands
+---
+
+## 🚀 Commands
+
+### Browse
 
 | Command | Description |
 |---------|-------------|
-| `skill list` | List all skills across all agents |
-| `skill list --agent <name>` | Filter by agent (claude, codex, gemini…) |
-| `skill show <id>` | Show full details of a skill |
-| `skill search <query>` | Search skills by name or description |
-| `skill scan` | Re-scan all directories and show results |
-| `skill doctor` | Health check for all agent skill directories |
-| `skill paths add <dir>` | Add a custom scan directory |
-| `skill paths remove <dir>` | Remove a custom scan directory |
-| `skill paths list` | List custom scan directories |
+| `skill list` | List all skills across every agent |
+| `skill list --agent <name>` | Filter by agent (`claude`, `codex`, `gemini`…) |
+| `skill list --json` | Output raw JSON |
+| `skill show <id>` | Show full details for a skill (`claude:browse`) |
+| `skill search <query>` | Search by name or description |
 
-## Demo
+### Maintenance
 
-### `skill scan` — discover all skills
+| Command | Description |
+|---------|-------------|
+| `skill scan` | Re-scan all directories and show updated results |
+| `skill scan --agent <name>` | Scan a specific agent only |
+| `skill doctor` | Health check — list parse errors and missing dirs |
+| `skill doctor --fix` | Auto-repair broken YAML frontmatter |
+
+### Custom Paths
+
+| Command | Description |
+|---------|-------------|
+| `skill paths add <dir>` | Register a custom scan directory |
+| `skill paths remove <dir>` | Remove a custom directory |
+| `skill paths list` | Show all registered custom directories |
+
+---
+
+## 📺 Examples
+
+<details>
+<summary><b>skill scan</b> — discover all skills</summary>
 
 ```
 $ skill scan
 Scanning agent directories...
-✓ Found 135 skills across 14 directories (46ms)
-⚠ 9 parse error(s) — run `skill doctor` for details
+✓ Found 144 skills across 14 directories (46ms)
 
  NAME                     AGENT       VERSION    DESCRIPTION
 ────────────────────────────────────────────────────────────────────────────
@@ -57,10 +106,12 @@ Scanning agent directories...
  paperclip                codex       -          Interact with the Paperc…
  xlsx                     codex       -          Comprehensive spreadsheet…
  chrome-cdp               openclaw    -          Interact with local Chrom…
- ...
 ```
 
-### `skill list --agent codex` — filter by agent
+</details>
+
+<details>
+<summary><b>skill list --agent codex</b> — filter by agent</summary>
 
 ```
 $ skill list --agent codex
@@ -69,14 +120,15 @@ $ skill list --agent codex
 ────────────────────────────────────────────────────────────────────────────
  paperclip                codex    -          Interact with the Paperclip…
  theme-factory            codex    -          Toolkit for styling artifact…
- doc-coauthoring          codex    -          Guide users through a struct…
  xlsx                     codex    -          Comprehensive spreadsheet cr…
  pdf                      codex    -          Comprehensive PDF manipulati…
- algorithmic-art          codex    -          Creating algorithmic art usi…
  skill-creator            codex    -          Guide for creating effective…
 ```
 
-### `skill search browser` — search across all agents
+</details>
+
+<details>
+<summary><b>skill search browser</b> — search across all agents</summary>
 
 ```
 $ skill search browser
@@ -90,22 +142,34 @@ $ skill search browser
  chrome-cdp               openclaw    -          Interact with local Chrom…
 ```
 
-### `skill doctor` — health check
+</details>
+
+<details>
+<summary><b>skill doctor --fix</b> — auto-repair broken skills</summary>
 
 ```
 $ skill doctor
-Scanned 14 directories, found 135 skills
+⚠ claude     ~/.claude/skills    64 skills (9 parse errors)
+...
+Run `skill doctor --fix` to attempt auto-repair.
 
-⚠ claude     ~/.claude/skills               64 skills (9 parse errors)
-✓ codex      ~/.codex/skills                22 skills
-✓ gemini     ~/.gemini/skills               0 skills
-✓ openclaw   ~/.openclaw/skills             14 skills
-✓ kiro       ~/.kiro/skills                 0 skills
-✓ opencode   ~/.config/opencode/skills      14 skills
-✓ agents     ~/.agents/skills               21 skills
+$ skill doctor --fix
+Attempting auto-fix...
+
+  ✓ fixed  ~/.claude/skills/clash-verge/SKILL.md
+           cleaned stray lines; backup saved as .bak
+  ✓ fixed  ~/.claude/skills/tts/SKILL.md
+           cleaned stray lines; backup saved as .bak
+  ...
+
+Fixed 9 file(s). Run `skill doctor` to verify.
+Original files backed up as <file>.bak
 ```
 
-### `skill paths` — add custom directories
+</details>
+
+<details>
+<summary><b>skill paths</b> — add custom directories</summary>
 
 ```
 $ skill paths add ~/.myagent/skills
@@ -117,6 +181,16 @@ Custom scan paths:
   ~/.myagent/skills
 ```
 
-## Contributing
+</details>
 
-See [CONTRIBUTING.md](CONTRIBUTING.md).
+---
+
+## 🤝 Contributing
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) — adding a new agent takes one line in `src/agents.ts`.
+
+---
+
+<div align="center">
+<sub>Made with ☕ · MIT License</sub>
+</div>
