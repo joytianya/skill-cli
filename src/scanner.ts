@@ -92,7 +92,7 @@ export async function scanSkills(extraPaths?: string[]): Promise<ScanResult> {
 
   const sources: AgentSource[] = [...KNOWN_AGENTS];
   if (allExtra.length > 0) {
-    sources.push({ name: "custom", paths: allExtra });
+    sources.push({ name: "extra", paths: allExtra });
   }
 
   for (const agent of sources) {
