@@ -5,6 +5,7 @@ import { showCommand } from "./commands/show.js";
 import { searchCommand } from "./commands/search.js";
 import { doctorCommand } from "./commands/doctor.js";
 import { scanCommand } from "./commands/scan.js";
+import { pathsCommand } from "./commands/paths.js";
 
 process.on("unhandledRejection", (err) => {
   console.error("Error:", err instanceof Error ? err.message : String(err));
@@ -46,5 +47,10 @@ program
   .option("--agent <name>", "Only scan a specific agent")
   .option("--json", "Output raw JSON")
   .action((opts) => scanCommand(opts));
+
+program
+  .command("paths [subcommand] [directory]")
+  .description("Manage custom scan paths (list / add <dir> / remove <dir>)")
+  .action((sub = "list", dir) => pathsCommand(sub, dir));
 
 program.parse();

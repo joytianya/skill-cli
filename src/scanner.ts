@@ -3,6 +3,7 @@ import path from "path";
 import os from "os";
 import matter from "gray-matter";
 import { KNOWN_AGENTS } from "./agents.js";
+import { getExtraPaths } from "./config.js";
 import type { Skill, ScanResult, AgentSource } from "./types.js";
 
 export function expandHome(p: string): string {
@@ -85,9 +86,13 @@ export async function scanSkills(extraPaths?: string[]): Promise<ScanResult> {
   const scannedDirs: string[] = [];
   const seenInodes = new Set<number>();
 
+  // Merge: known agents + user-configured paths + caller-supplied paths
+  const userPaths = getExtraPaths();
+  const allExtra = [...userPaths, ...(extraPaths ?? [])];
+
   const sources: AgentSource[] = [...KNOWN_AGENTS];
-  if (extraPaths && extraPaths.length > 0) {
-    sources.push({ name: "extra", paths: extraPaths });
+  if (allExtra.length > 0) {
+    sources.push({ name: "custom", paths: allExtra });
   }
 
   for (const agent of sources) {
