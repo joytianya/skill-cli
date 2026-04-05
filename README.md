@@ -2,6 +2,9 @@
 
 A unified CLI to browse and manage AI agent skills across all local AI tools — Claude, Codex, Gemini, and more.
 
+![demo](demo.gif)
+
+
 ## Supported Agents
 
 | Agent | Skills Path |
