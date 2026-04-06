@@ -1,6 +1,7 @@
 import fs from "fs";
 import path from "path";
 import os from "os";
+import { expandHome } from "./utils.js";
 
 const CONFIG_DIR = path.join(os.homedir(), ".skill-cli");
 const CONFIG_FILE = path.join(CONFIG_DIR, "config.json");
@@ -31,7 +32,7 @@ export function getExtraPaths(): string[] {
 }
 
 export function addPath(p: string): { added: boolean; reason?: string } {
-  const expanded = p.startsWith("~/") ? path.join(os.homedir(), p.slice(2)) : path.resolve(p);
+  const expanded = p.startsWith("~/") ? expandHome(p) : path.resolve(p);
   const config = readConfig();
   if (config.extraPaths.includes(expanded)) {
     return { added: false, reason: "already exists" };
@@ -42,7 +43,7 @@ export function addPath(p: string): { added: boolean; reason?: string } {
 }
 
 export function removePath(p: string): { removed: boolean } {
-  const expanded = p.startsWith("~/") ? path.join(os.homedir(), p.slice(2)) : path.resolve(p);
+  const expanded = p.startsWith("~/") ? expandHome(p) : path.resolve(p);
   const config = readConfig();
   const before = config.extraPaths.length;
   config.extraPaths = config.extraPaths.filter((ep) => ep !== expanded);

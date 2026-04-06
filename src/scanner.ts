@@ -1,15 +1,10 @@
 import fs from "fs";
 import path from "path";
-import os from "os";
 import matter from "gray-matter";
 import { KNOWN_AGENTS } from "./agents.js";
 import { getExtraPaths } from "./config.js";
+import { expandHome } from "./utils.js";
 import type { Skill, ScanResult, AgentSource } from "./types.js";
-
-export function expandHome(p: string): string {
-  if (p.startsWith("~/")) return path.join(os.homedir(), p.slice(2));
-  return p;
-}
 
 // Strip ANSI escape sequences and C0/C1 control characters from untrusted strings
 function sanitize(s: string): string {

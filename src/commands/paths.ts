@@ -1,11 +1,6 @@
 import chalk from "chalk";
-import os from "os";
 import { addPath, removePath, listPaths } from "../config.js";
-
-function shortenHome(p: string): string {
-  const home = os.homedir();
-  return p.startsWith(home) ? "~" + p.slice(home.length) : p;
-}
+import { shortenHome } from "../utils.js";
 
 export function pathsCommand(sub: string, target?: string): void {
   if (sub === "list" || !sub) {

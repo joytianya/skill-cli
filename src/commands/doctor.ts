@@ -1,15 +1,10 @@
 import chalk from "chalk";
 import fs from "fs";
-import os from "os";
 import path from "path";
-import { scanSkills, expandHome } from "../scanner.js";
+import { scanSkills } from "../scanner.js";
+import { expandHome, shortenHome } from "../utils.js";
 import { KNOWN_AGENTS } from "../agents.js";
 import type { ScanResult } from "../types.js";
-
-function shortenHome(p: string): string {
-  const home = os.homedir();
-  return p.startsWith(home) ? "~" + p.slice(home.length) : p;
-}
 
 /**
  * Attempt to auto-fix a SKILL.md with YAML frontmatter errors.
